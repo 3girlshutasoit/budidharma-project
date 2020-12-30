@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Belajar Javascript</title>
+    
+    <script src="assets/vendor/jquery-3.2.1.min.js"></script>
+    <!--
+	<script type="text/javascript">
+
+    $(document).ready(function() {           
+    $('#submit1').click(function(event) {
+    event.preventDefault();
+	var tes = $('#tes').val();
+    $.ajax({
+        type: 'POST',
+        url: 'website/admin/view/viewsesiloginadmin.php',
+		data: ({ tes: tes }),
+		dataType: 'json',
+        cache: false,
+        success: function(response) {
+        $('#userTable tbody').empty();
+              var len = response.length;
+              
+                for(var i=0; i<len; i++){
+				var tesp = response[i].tesp;
+                var sesip = response[i].sesip;
+				var tipep = response[i].tipep;
+				var namap = response[i].namap;
+				var sop = response[i].sop;
+				var infop = response[i].infop;
+				var alamatp = response[i].alamatp;
+
+                var tr_str = "<tr>" +
+					"<td align='center'>" + tesp + "</td>" +
+                    "<td align='center'>" + sesip + "</td>" +
+                    "<td align='center'>" + tipep + "</td>" +
+                    "<td align='center'>" + namap + "</td>" +
+                    "<td align='center'>" + sop + "</td>" +
+                    "<td align='center'>" + infop + "</td>" +
+					"<td align='center'>" + alamatp + "</td>" +
+                    "</tr>";
+					
+				$("#userTable tbody").append(tr_str);
+            }
+        }
+    });
+    });
+    });
+
+    </script>-->
+    
+    <script type="text/javascript">
+	$(document).ready(function () {
+    ajax_call = function() {
+        $.ajax({ //create an ajax request to load_page.php
+            type: 'GET',
+            url: 'website/admin/view/viewsesiloginadmin.php',
+            dataType: 'json', //expect html to be returned                
+            success: function (response) {
+                $('#userTable tbody').empty();
+              	var len = response.length;
+              
+                for(var i=0; i<len; i++){
+                var sesip = response[i].sesip;
+				var tipep = response[i].tipep;
+				var namap = response[i].namap;
+				var sop = response[i].sop;
+				var infop = response[i].infop;
+				var alamatp = response[i].alamatp;
+
+                var tr_str = "<tr>" +
+                    "<td align='center'>" + sesip + "</td>" +
+                    "<td align='center'>" + tipep + "</td>" +
+                    "<td align='center'>" + namap + "</td>" +
+                    "<td align='center'>" + sop + "</td>" +
+                    "<td align='center'>" + infop + "</td>" +
+					"<td align='center'>" + alamatp + "</td>" +
+                    "</tr>";
+					
+				$("#userTable tbody").append(tr_str);
+            }
+            }
+        });
+    };
+    var interval = 2000;
+    setInterval(ajax_call, interval);
+	});
+	</script>
+    
+    <script type="text/javascript">
+    $(document).ready(function() {           
+    $('#submit1').click(function(event) {
+    event.preventDefault();
+    $.ajax({
+            type: 'GET',
+            url: 'website/admin/view/viewsesiloginadmin.php',
+            dataType: 'json',               
+            success: function (response) {
+                var len = response.length;
+              
+                for(var i=0; i<len; i++){
+                var ridp = response[i].ridp;
+                var idsesip = response[i].idsesip;
+                var tipep = response[i].tipep;
+                var namap = response[i].namap;
+                var sop = response[i].sop;
+                var infop = response[i].infop;
+                var sesip = response[i].sesip;
+                var alamatp = response[i].alamatp;
+
+                outadmin(ridp, idsesip, tipep, namap, sop, infop, sesip, alamatp);
+                
+            }
+            }
+        });
+    });
+    });
+    </script>
+
+    <script type="text/javascript">
+    function outadmin(vridp, vidsesip, vtipep, vnamap, vsop, vinfop, vsesip, valamatp){
+    
+    $.ajax({
+        type: 'POST',
+        url: 'website/admin/view/viewsesilogoutadmin.php',
+        data: ({ vridp: vridp, vidsesip: vidsesip, vtipep: vtipep, vnamap: vnamap, vsop: vsop, vinfop: vinfop, vsesip: vsesip, valamatp: valamatp }),
+        dataType: 'json',
+        success: function(response){
+                var len = response.length;
+              
+                for(var i=0; i<len; i++){
+				/*
+                var respon = response[i].respon;
+                var pesan = response[i].pesan;
+
+                if(respon=="1") {
+                    //window.open('http://192.168.43.75/budidharma/menu.html','_self');
+                    window.open('http://localhost/budidharma/index.html','_self');
+                }else {
+                    var staticModal = $('#staticModal');
+                    staticModal.find('.modal-body').text(''+pesan);
+                    staticModal.modal('show');
+                }*/
+				alert(''+response[i].vsesip);
+        		}
+		}
+    });
+    }
+    </script>
+    
+</head>
+<body>
+<form>
+            <table>
+                <tr><td colspan="2"><input type="submit" id="submit1" name="submit1"></button></td></tr>
+            </table>
+	</form>
+<table border="1" id="userTable">
+<thead>
+	<tr>
+        <th>SESSION</th>
+        <th>TIPE PERANGKAT</th>
+        <th>NAMA PERANGKAT</th>
+        <th>SISTEM OPERASI</th>
+        <th>INFO LENGKAP PERANGKAT</th>
+        <th>ALAMAT PERANGKAT</th>
+	</tr>
+</thead>
+<tbody></tbody>   
+</table>
+
+</body>
+</html>

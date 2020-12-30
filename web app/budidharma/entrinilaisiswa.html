@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="au theme template">
+    <meta name="author" content="Hau Nguyen">
+    <meta name="keywords" content="au theme template">
+
+    <!-- Title Page-->
+    <title>Dashboard</title>
+
+    <!-- Fontfaces CSS-->
+    <link href="assets/css/font-face.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link href="assets/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link href="assets/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/wow/animate.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/slick/slick.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="assets/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="assets/css/theme.css" rel="stylesheet" media="all">
+
+    <script src="assets/vendor/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript">
+        function ckLoadingPage() {
+            $.ajax({
+            type: 'POST',
+            url: 'serverxmladmin/subentitas/cekloadingpage.php',
+            dataType: 'json',
+            success: function(response){
+                var len = response.length;
+              
+                for(var i=0; i<len; i++){
+                var ridgurup = response[i].ridgurup;
+                var pilihan = response[i].pilihan;
+
+                if(pilihan!="2") {
+                    //window.open('http://192.168.43.75/budidharma/index.html','_self');
+                    window.open('http://localhost/budidharma/index.html','_self');
+                }
+                }
+            }
+            });
+        }
+        window.onload = ckLoadingPage;
+    </script>
+
+
+    <script type="text/javascript">
+    $(document).ready(function() {           
+    $('#keluar').click(function(event) {
+    event.preventDefault();
+    $.ajax({
+            type: 'GET',
+            url: 'website/guru/view/viewsesiloginguru.php',
+            dataType: 'json',               
+            success: function (response) {
+                var len = response.length;
+              
+                for(var i=0; i<len; i++){
+                var ridp = response[i].ridp;
+                var idsesip = response[i].idsesip;
+                var tipep = response[i].tipep;
+                var namap = response[i].namap;
+                var sop = response[i].sop;
+                var infop = response[i].infop;
+                var sesip = response[i].sesip;
+                var alamatp = response[i].alamatp;
+
+                outadmin(ridp, idsesip, tipep, namap, sop, infop, sesip, alamatp);
+                
+            }
+            }
+        });
+    });
+    });
+    </script>
+
+    <script type="text/javascript">
+    function outadmin(vridp, vidsesip, vtipep, vnamap, vsop, vinfop, vsesip, valamatp){
+    
+    $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewlogoutguru.php',
+        data: ({ vridp: vridp, vidsesip: vidsesip, vtipep: vtipep, vnamap: vnamap, vsop: vsop, vinfop: vinfop, vsesip: vsesip, valamatp: valamatp }),
+        dataType: 'json',
+        success: function(response){
+                var len = response.length;
+              
+                for(var i=0; i<len; i++){
+                var respon = response[i].respon;
+                var pesan = response[i].pesan;
+
+                if(respon=="1") {
+                    //window.open('http://192.168.43.75/budidharma/index.html','_self');
+                    window.open('http://localhost/budidharma/index.html','_self');
+                }else {
+                    var staticModal = $('#staticModal');
+                    staticModal.find('.modal-body').text(''+pesan);
+                    staticModal.modal('show');
+                }
+        }
+        }
+    });
+    }
+    </script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {           
+    $('#btnsta').click(function(event) {
+    event.preventDefault();
+    var kelasp = $('#taps').val();
+    $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewdaftarkelassiswaforguru.php',
+        data: ({ kelasp: kelasp }),
+        dataType:"json",
+        success: function(response) {
+        $('#tabelta tbody').empty();
+              var len = response.length;
+                for(var i=0; i<len; i++){
+                var id_kelassiswa = response[i].id_kelassiswa;
+                var id_kelas = response[i].id_kelas;
+                var nama_kelas = response[i].nama_kelas;
+                var id_siswa = response[i].id_siswa;
+                var nis = response[i].nis;
+                var nama_siswa = response[i].nama_siswa;
+                var email = response[i].email;
+
+                var tr_str = "<tr>" +
+                    "<td align='center'>" + id_kelassiswa + "</td>" +
+                    "<td align='center'>" + id_kelas + "</td>" +
+                    "<td align='center'>" + nama_kelas + "</td>" +
+                    "<td align='center'>" + id_siswa + "</td>" +
+                    "<td align='center'>" + nis + "</td>" +
+                    "<td align='center'>" + nama_siswa + "</td>" +
+                    "<td align='center'>" + email + "</td>" +
+                    "</tr>";
+
+                $("#tabelta tbody").append(tr_str);
+            }
+        }
+    });
+    });
+    });
+
+    </script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {           
+    $('#lmta').click(function(event) {
+    event.preventDefault();
+    $('#tabelta tbody').empty();
+    });
+    });
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+        $(document).on("click",'#tabelta tbody tr',function(){
+
+        var tr=$(this);
+        var varridks=tr.find("td:eq(0)").text();
+        var varridek=tr.find("td:eq(1)").text();
+        var varta=tr.find("td:eq(5)").text();
+        sesitatemp(varridks, varridek);
+        $("#largeModal").modal('toggle');
+        $('#tap').val(varta);
+        });
+        });
+    </script>
+
+    <script type="text/javascript">
+    function sesitatemp(varridks, varridek){
+    
+    $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewsesiridkelassiswatemp.php',
+        data: ({ varridks: varridks, varridek: varridek }),
+        dataType: 'json'
+    });
+    }
+    </script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {           
+    $('#btnsk').click(function(event) {
+    event.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewdaftarujianforguru.php',
+        dataType:"json",
+        success: function(response) {
+        $('#tabelk tbody').empty();
+              var len = response.length;
+                for(var i=0; i<len; i++){
+                var id_daftarujian = response[i].id_daftarujian;
+                var id_kategori = response[i].id_kategori;
+                var nama_kategori = response[i].nama_kategori;
+
+                var tr_str = "<tr>" +
+                    "<td>" + id_daftarujian + "</td>" +
+                    "<td>" + id_kategori + "</td>" +
+                    "<td>" + nama_kategori + "</td>" +
+                    "</tr>";
+
+                $("#tabelk tbody").append(tr_str);
+            }
+        }
+    });
+    });
+    });
+
+    </script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {           
+    $('#lmk').click(function(event) {
+    event.preventDefault();
+    $('#tabelk tbody').empty();
+    });
+    });
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+        $(document).on("click",'#tabelk tbody tr',function(){
+
+        var tr=$(this);
+        var varridku=tr.find("td:eq(0)").text();
+        var varnmsiswa=tr.find("td:eq(2)").text();
+        sesikelastemp(varridku);
+        $("#largeModal2").modal('toggle');
+        $('#nama').val(varnmsiswa);
+        });
+        });
+    </script>
+
+    <script type="text/javascript">
+    function sesikelastemp(varridku){
+    
+    $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewsesiriddaftarujiantemp.php',
+        data: ({ varridku: varridku }),
+        dataType: 'json'
+    });
+    }
+    </script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {           
+    $('#btnski').click(function(event) {
+    event.preventDefault();
+    $.ajax({
+            type: 'GET',
+            url: 'website/guru/view/viewsesigetridsiswadankelastemp.php',
+            dataType: 'json',               
+            success: function (response) {
+                var len = response.length;
+              
+                for(var i=0; i<len; i++){
+                var gurup = response[i].gurup;
+                var kelasp = response[i].kelasp;
+
+                simpanDaftarDataKelas2(gurup, kelasp);
+                
+            }
+            }
+        });
+    });
+    });
+
+    </script>
+
+    <script type="text/javascript">
+    function simpanDaftarDataKelas2(gurup, kelasp){
+    $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewdaftarpelajaranforguru.php',
+        data: ({ gurup: gurup, kelasp: kelasp }),
+        dataType: 'json',
+        success: function(response){
+                var len = response.length;
+                for(var i=0; i<len; i++){
+                var id_kelas = response[i].id_kelas;
+                var nama_kelas = response[i].nama_kelas;
+                var id_pel = response[i].id_pel;
+                var nama_pel = response[i].nama_pel;
+
+                var tr_str = "<tr>" +
+                    "<td>" + id_kelas + "</td>" +
+                    "<td>" + nama_kelas + "</td>" +
+                    "<td>" + id_pel + "</td>" +
+                    "<td>" + nama_pel + "</td>" +
+                    "</tr>";
+
+                $("#tabelki tbody").append(tr_str);
+        }
+        }
+    });
+    }
+    </script>
+
+    <script type="text/javascript">
+
+    $(document).ready(function() {           
+    $('#lmki').click(function(event) {
+    event.preventDefault();
+    $('#tabelki tbody').empty();
+    });
+    });
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+        $(document).on("click",'#tabelki tbody tr',function(){
+
+        var tr=$(this);
+        var varridpe=tr.find("td:eq(2)").text();
+        var varnmki=tr.find("td:eq(3)").text();
+        sesikategoritemp(varridpe);
+        $("#largeModal3").modal('toggle');
+        $('#kup').val(varnmki);
+        });
+        });
+    </script>
+
+    <script type="text/javascript">
+    function sesikategoritemp(varridpe){
+    
+    $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewsesiridpelajarantemp.php',
+        data: ({ varridpe: varridpe }),
+        dataType: 'json'
+    });
+    }
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function() {           
+    $('#submit1').click(function(event) {
+    event.preventDefault();
+    $.ajax({
+            type: 'GET',
+            url: 'website/guru/view/viewsesigetnilaiujiandanidusertemp.php',
+            dataType: 'json',               
+            success: function (response) {
+                var len = response.length;
+              
+                for(var i=0; i<len; i++){
+                var riduserp = response[i].riduserp;
+                var ridgurup = response[i].ridgurup;
+                var ridksp = response[i].ridksp;
+                var ridkup = response[i].ridkup;
+                var ridpep = response[i].ridpep;
+
+                simpanDaftarDataKelas(riduserp, ridgurup, ridksp, ridkup, ridpep);
+                
+            }
+            }
+        });
+    });
+    });
+    </script>
+
+    <script type="text/javascript">
+    function simpanDaftarDataKelas(riduserp, ridgurup, ridksp, ridkup, ridpep){
+    var namap = $('#nama').val();
+    var nilai = $('#nilai').val();
+    var urlp = '';
+    if(namap=="bulanan") {
+        $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewentrinilaiujianbulanan.php',
+        data: ({ riduserp: riduserp, ridgurup: ridgurup, ridksp: ridksp, ridkup: ridkup, ridpep: ridpep, nilai: nilai }),
+        dataType: 'json',
+        success: function(response){
+                var len = response.length;
+                for(var i=0; i<len; i++){
+                var nama = response[i].pesan;
+                var staticModal = $('#staticModal');
+                staticModal.find('.modal-body').text(''+nama);
+                staticModal.modal('show');
+        }
+        }
+    });
+    }else if(namap=="mid") {
+        $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewentrinilaiujianmid.php',
+        data: ({ riduserp: riduserp, ridgurup: ridgurup, ridksp: ridksp, ridkup: ridkup, ridpep: ridpep, nilai: nilai }),
+        dataType: 'json',
+        success: function(response){
+                var len = response.length;
+                for(var i=0; i<len; i++){
+                var nama = response[i].pesan;
+                var staticModal = $('#staticModal');
+                staticModal.find('.modal-body').text(''+nama);
+                staticModal.modal('show');
+        }
+        }
+    });
+    }else {
+        $.ajax({
+        type: 'POST',
+        url: 'website/guru/view/viewentrinilaiujiansemester.php',
+        data: ({ riduserp: riduserp, ridgurup: ridgurup, ridksp: ridksp, ridkup: ridkup, ridpep: ridpep, nilai: nilai }),
+        dataType: 'json',
+        success: function(response){
+                var len = response.length;
+                for(var i=0; i<len; i++){
+                var nama = response[i].pesan;
+                var staticModal = $('#staticModal');
+                staticModal.find('.modal-body').text(''+nama);
+                staticModal.modal('show');
+        }
+        }
+    });
+    }
+    }
+    </script>
+
+</head>
+
+<body class="animsition">
+    <div class="page-wrapper">
+        <!-- HEADER MOBILE-->
+        
+        <header class="header-mobile d-block d-lg-none">
+            <div class="header-mobile__bar">
+                <div class="container-fluid">
+                    <div class="header-mobile-inner">
+                        <a class="logo" href="menu.html">
+                            <img src="assets/images/icon/menusma.png" alt="smabudidharma" />
+                        </a>
+                        <button class="hamburger hamburger--slider" type="button">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        
+            <nav class="navbar-mobile">
+                <div class="container-fluid">
+                    <ul class="navbar-mobile__list list-unstyled">
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-tachometer-alt"></i>View Data</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="menuguru.html">Main Menu</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-tachometer-alt"></i>Insert Data</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="menuguru.html">Main Menu</a>
+                                </li>
+                                <li>
+                                    <a href="entrigantisandiguru.html">Entri Ganti Sandi Guru</a>
+                                </li>
+                                <li>
+                                    <a href="entrinilaisiswa.html">Entri Nilai Siswa</a>
+                                </li>
+                                <li>
+                                    <a href="entrinilaitotalsiswa.html">Entri Nilai Total Siswa</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-tachometer-alt"></i>Update Data</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="menuguru.html">Main Menu</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- END HEADER MOBILE-->
+
+        <!-- MENU SIDEBAR-->
+        <aside class="menu-sidebar d-none d-lg-block">
+            <div class="logo">
+                <a href="#">
+                    <img src="assets/images/icon/menusma.png" alt="smabudidharma" />
+                </a>
+            </div>
+            <div class="menu-sidebar__content js-scrollbar1">
+                <nav class="navbar-sidebar">
+                    <ul class="list-unstyled navbar__list">
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-tachometer-alt"></i>View Data</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="menuguru.html">Main Menu</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-tachometer-alt"></i>Insert Data</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="menuguru.html">Main Menu</a>
+                                </li>
+                                <li>
+                                    <a href="entrigantisandiguru.html">Entri Ganti Sandi Guru</a>
+                                </li>
+                                <li>
+                                    <a href="entrinilaisiswa.html">Entri Nilai Siswa</a>
+                                </li>
+                                <li>
+                                    <a href="entrinilaitotalsiswa.html">Entri Nilai Total Siswa</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
+                                <i class="fas fa-tachometer-alt"></i>Update Data</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="menuguru.html">Main Menu</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <!-- END MENU SIDEBAR-->
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- HEADER DESKTOP-->
+            <header class="header-desktop">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="header-wrap">
+                            <div class="header-button">
+                                <div class="noti-wrap">
+                                    <div class="noti__item js-item-menu">
+                                        <div class="image">
+                                            <img src="assets/images/icon/admin.png"/>
+                                        </div>
+                                        <div class="mess-dropdown js-dropdown">
+                                            <div class="mess__item">
+                                                <div class="image">
+                                                    <img src="assets/images/icon/admin.png" alt="Guru" />
+                                                </div>
+                                                <div class="content">
+                                                    <a href="menuguru.html">
+                                                    <h6>Guru</h6></a>
+                                                </div>
+                                            </div>
+                                            <div class="account-dropdown__footer" id="keluar">
+                                                    <i class="zmdi zmdi-power"> LOGOUT</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- HEADER DESKTOP-->
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>ENTRI DATA NILAI SISWA</strong>
+                                    </div>
+                                    <form>
+                                    <div class="card-body card-block">
+                                        <div class="has-success form-group">
+                                            <label for="tas" class=" form-control-label">Data Kelas Dan Siswa</label>
+                                        <div class="input-group">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary au-btn au-btn--block" type="button" data-toggle="modal" data-target="#largeModal" id="lmta">
+                                                    <i class="fa fa-search"></i></button>
+                                            </div>
+                                            <input type="text" id="tap" name="tap" placeholder="Nama Siswa" class="form-control au-input--full" disabled="">
+                                        </div>
+                                        </div>
+                                        <div class="has-success form-group">
+                                            <label for="namas" class=" form-control-label">Data Daftar Ujian</label>
+                                        <div class="input-group">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary au-btn au-btn--block" type="button" data-toggle="modal" data-target="#largeModal2" id="lmk">
+                                                    <i class="fa fa-search"></i></button>
+                                            </div>
+                                            <input type="text" id="nama" name="nama" placeholder="Data Daftar Ujian" class="form-control au-input--full" disabled="">
+                                        </div>
+                                        </div>
+                                        <div class="has-success form-group">
+                                            <label for="kus" class=" form-control-label">Data Pelajaran</label>
+                                        <div class="input-group">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary au-btn au-btn--block" type="button" data-toggle="modal" data-target="#largeModal3" id="lmki">
+                                                    <i class="fa fa-search"></i></button>
+                                            </div>
+                                            <input type="text" id="kup" name="kup" placeholder="Data Pelajaran" class="form-control au-input--full" disabled="">
+                                        </div>
+                                        </div>
+                                        <div class="has-success form-group">
+                                            <label for="namas" class=" form-control-label">Nilai</label>
+                                        <div class="input-group">
+                                            <input type="text" id="nilai" name="nilai" placeholder="Nilai Pelajaran" class="form-control au-input au-input--full">
+                                        </div>
+                                        </div>
+                                        <div class="input-group-btn">
+                                        <button class="btn btn-success au-btn au-btn--block au-btn--green m-b-20" id="submit1" name="submit1" type="submit">
+                                            <i class="fa fa-dot-circle-o"></i> Submit
+                                        </button>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="copyright">
+                                    <p>Copyright © 2020 By Kiki Anatania. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT-->
+            <!-- END PAGE CONTAINER-->
+            <div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true"
+             data-backdrop="static">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticModalLabel">PESAN</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="largeModalLabel">Pencarian Daftar Tahun Ajaran Aktif</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>DAFTAR DATA KELAS DAN SISWA</strong>
+                                    </div>
+                                    <form>
+                                    <div class="card-body card-block">
+                                        <div class="row form-group">
+                                                <div class="col col-lg-6">
+                                                    <div class="input-group">
+                                                        <input type="text" id="taps" name="taps" placeholder="Nama Kelas" class="form-control">
+
+                                                        <div class="input-group-btn">
+                                                        <button class="btn btn-primary au-btn au-btn--block" id="btnsta" name="btnsta" type="submit">
+                                                        <i class="fa fa-search"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    </form>
+
+                                    <div class="col-md-12" id="tabelta">
+                                    <div class="table-responsive table-data table--no-card m-b-30">
+                                    <table class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Id Kelas</th>
+                                                <th>Nama Kelas</th>
+                                                <th>Id Siswa</th>
+                                                <th>No. Induk Siswa</th>
+                                                <th>Nama Siswa</th>
+                                                <th>Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="largeModal2" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="largeModalLabel">Pencarian Daftar Ujian</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>DAFTAR DATA UJIAN</strong>
+                                    </div>
+                                    <form>
+                                    <div class="card-body card-block">
+                                        <div class="row form-group">
+                                                <div class="col col-lg-6">
+                                                    <div class="input-group">
+                                                        <div class="input-group-btn">
+                                                        <button class="btn btn-primary au-btn au-btn--block" id="btnsk" name="btnsk" type="submit">
+                                                        <i class="fa fa-search"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    </form>
+
+                                    <div class="col-md-12" id="tabelk">
+                                    <div class="table-responsive table-data table--no-card m-b-30">
+                                    <table class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Id Kategori</th>
+                                                <th>Nama Kategori</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="largeModal3" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="largeModalLabel">Pencarian Data Pelajaran</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>DAFTAR DATA PELAJARAN</strong>
+                                    </div>
+                                    <form>
+                                    <div class="card-body card-block">
+                                        <div class="row form-group">
+                                                <div class="col col-lg-6">
+                                                    <div class="input-group">
+                                                        <div class="input-group-btn">
+                                                        <button class="btn btn-primary au-btn au-btn--block" id="btnski" name="btnski" type="submit">
+                                                        <i class="fa fa-search"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    </form>
+
+                                    <div class="col-md-12" id="tabelki">
+                                    <div class="table-responsive table-data table--no-card m-b-30">
+                                    <table class="table table-borderless table-striped table-earning">
+                                        <thead>
+                                            <tr>
+                                                <th>Id Kelas</th>
+                                                <th>Nama Kelas</th>
+                                                <th>Id Pelajaran</th>
+                                                <th>Nama Pelajaran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="assets/vendor/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap JS-->
+    <script src="assets/vendor/bootstrap-4.1/popper.min.js"></script>
+    <script src="assets/vendor/bootstrap-4.1/bootstrap.min.js"></script>
+    <!-- Vendor JS       -->
+    <script src="assets/vendor/slick/slick.min.js">
+    </script>
+    <script src="assets/vendor/wow/wow.min.js"></script>
+    <script src="assets/vendor/animsition/animsition.min.js"></script>
+    <script src="assets/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
+    </script>
+    <script src="assets/vendor/counter-up/jquery.waypoints.min.js"></script>
+    <script src="assets/vendor/counter-up/jquery.counterup.min.js">
+    </script>
+    <script src="assets/vendor/circle-progress/circle-progress.min.js"></script>
+    <script src="assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="assets/vendor/chartjs/Chart.bundle.min.js"></script>
+    <script src="assets/vendor/select2/select2.min.js">
+    </script>
+
+    <!-- Main JS-->
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
+<!-- end document-->

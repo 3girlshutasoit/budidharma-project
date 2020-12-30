@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Belajar Javascript</title>
+    
+    <script src="assets/vendor/jquery-3.2.1.min.js"></script>
+    
+	<script type="text/javascript">
+
+    $(document).ready(function() {           
+    $('#submit1').click(function(event) {
+    event.preventDefault();
+	var tes = $('#tes').val();
+    $.ajax({
+        type: 'POST',
+        url: 'website/admin/view/viewsesiloginadmin.php',
+		data: ({ tes: tes }),
+		dataType: 'json',
+        cache: false,
+        success: function(response) {
+        $('#userTable tbody').empty();
+              var len = response.length;
+              
+                for(var i=0; i<len; i++){
+				var tesp = response[i].tesp;
+                var sesip = response[i].sesip;
+				var tipep = response[i].tipep;
+				var namap = response[i].namap;
+				var sop = response[i].sop;
+				var infop = response[i].infop;
+				var alamatp = response[i].alamatp;
+
+                var tr_str = "<tr>" +
+					"<td align='center'>" + tesp + "</td>" +
+                    "<td align='center'>" + sesip + "</td>" +
+                    "<td align='center'>" + tipep + "</td>" +
+                    "<td align='center'>" + namap + "</td>" +
+                    "<td align='center'>" + sop + "</td>" +
+                    "<td align='center'>" + infop + "</td>" +
+					"<td align='center'>" + alamatp + "</td>" +
+                    "</tr>";
+					
+				$("#userTable tbody").append(tr_str);
+            }
+        }
+    });
+    });
+    });
+
+    </script>
+    
+</head>
+<body>
+
+    <form>
+            <table>
+            	<tr><td>NAMA</td><td><input type="text" id="tes" name="tes"></td></tr>
+                <tr><td colspan="2"><input type="submit" id="submit1" name="submit1"></button></td></tr>
+            </table>
+    </form>
+    
+<table border="1" id="userTable">
+<thead>
+	<tr>
+		<th>NAMA USER</th>
+        <th>SESSION</th>
+        <th>TIPE PERANGKAT</th>
+        <th>NAMA PERANGKAT</th>
+        <th>SISTEM OPERASI</th>
+        <th>INFO LENGKAP PERANGKAT</th>
+        <th>ALAMAT PERANGKAT</th>
+	</tr>
+</thead>
+<tbody></tbody>   
+</table>
+
+</body>
+</html>

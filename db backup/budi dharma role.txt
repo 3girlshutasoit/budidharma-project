@@ -1,0 +1,11 @@
+role name superuser: budi_dharma
+password : budidharma123
+
+role name admin : admin_budidharma
+password : bdadmin123
+
+role name guru : guru_budidharma
+password : bdguru123
+
+role name siswa : siswa_budidharma
+password : bdsiswa123
